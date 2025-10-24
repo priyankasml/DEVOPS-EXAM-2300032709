@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql:8
+    container_name: mysql-examdb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: examdb205
+    ports:
+      - "3000:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - springboot-mysql-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pdocker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: priyankasml/2300032709-exam-backend:latest
+    container_name: springboot-examdb
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    ports:
+      - "2025:2000"
+    restart: on-failure
+    networks:
+      - springboot-mysql-net
+
+  frontend:
+    image: priyankasml/2300032709-exam-frontend:latest
+    container_name: react-examdb
+    depends_on:
+      - backend
+    ports:
+      - "3001:80"
+    restart: on-failure
+    networks:
+      - springboot-mysql-net
+
+volumes:
+  mysql_data:
+
+networks:
+  springboot-mysql-net:
