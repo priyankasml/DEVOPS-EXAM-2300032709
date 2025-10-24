@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import VoterApp from "./VoterApp";
-
 import {
   Button,
   Card,
@@ -156,8 +154,7 @@ export default function VoterApp() {
                 <TextField
                   fullWidth
                   margin="dense"
-                  label="Gender"
-                  name="gender"
+                  label="Gender"name="gender"
                   select
                   value={voter.gender}
                   onChange={handleChange}
